@@ -293,64 +293,108 @@ html, body {
   </div>
   <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
   <div class="form-card">
+
+    <!-- STUDENT INFO (students table) -->
     <div class="form-sec">
-      <div class="sec-title">Personal Information</div>
+      <div class="sec-title">Student Information</div>
       <div class="row2">
-        <div class="fg"><label>First Name *</label><input type="text" id="f-fname" placeholder="e.g. Aryan"><div class="err-msg">Enter your first name.</div></div>
-        <div class="fg"><label>Last Name *</label><input type="text" id="f-lname" placeholder="e.g. Sharma"><div class="err-msg">Enter your last name.</div></div>
+        <div class="fg"><label>Student ID (id) *</label><input type="text" id="f-student-id" placeholder="e.g. STU-2024-001"><div class="err-msg">Enter your student ID.</div></div>
+        <div class="fg"><label>Full Name (name) *</label><input type="text" id="f-name" placeholder="e.g. Aryan Sharma"><div class="err-msg">Enter your full name.</div></div>
       </div>
       <div class="row2">
-        <div class="fg"><label>Date of Birth *</label><input type="date" id="f-dob"><div class="err-msg">Required.</div></div>
-        <div class="fg"><label>Student ID</label><input type="text" id="f-sid" placeholder="e.g. STU-2024-001"></div>
+        <div class="fg"><label>Email (email) *</label><input type="email" id="f-email" placeholder="you@example.com"><div class="err-msg">Enter a valid email.</div></div>
+        <div class="fg"><label>Phone (phone) *</label><input type="tel" id="f-phone" placeholder="+91 9XXXXXXXXX"><div class="err-msg">Enter phone number.</div></div>
       </div>
-    </div>
-    <div class="form-sec">
-      <div class="sec-title">Contact Details</div>
       <div class="row2">
-        <div class="fg"><label>Email Address *</label><input type="email" id="f-email" placeholder="you@example.com"><div class="err-msg">Enter a valid email.</div></div>
-        <div class="fg"><label>Phone Number *</label><input type="tel" id="f-phone" placeholder="+91 9XXXXXXXXX"><div class="err-msg">Enter phone number.</div></div>
-      </div>
-    </div>
-    <div class="form-sec">
-      <div class="sec-title">Course Details</div>
-      <div class="row2">
+        <div class="fg"><label>Date of Birth (date_of_birth) *</label><input type="date" id="f-dob"><div class="err-msg">Select your date of birth.</div></div>
         <div class="fg">
-          <label>Department *</label>
-          <select id="f-dept"><option value="" disabled selected>Select department</option><option>Computer Science</option><option>Electrical Engineering</option><option>Business &amp; Management</option><option>Design &amp; Arts</option><option>Data Science &amp; AI</option><option>Life Sciences</option><option>Mathematics</option></select>
+          <label>Department (department_id) *</label>
+          <select id="f-dept">
+            <option value="" disabled selected>Select department</option>
+            <option value="DEPT-CS">Computer Science</option>
+            <option value="DEPT-EE">Electrical Engineering</option>
+            <option value="DEPT-BM">Business &amp; Management</option>
+            <option value="DEPT-DA">Design &amp; Arts</option>
+            <option value="DEPT-AI">Data Science &amp; AI</option>
+            <option value="DEPT-LS">Life Sciences</option>
+            <option value="DEPT-MA">Mathematics</option>
+          </select>
           <div class="err-msg">Select a department.</div>
         </div>
-        <div class="fg"><label>Course Name *</label><input type="text" id="f-course" placeholder="e.g. Machine Learning"><div class="err-msg">Enter course name.</div></div>
+      </div>
+    </div>
+
+    <!-- REGISTRATION INFO (registrations table) -->
+    <div class="form-sec">
+      <div class="sec-title">Registration Details</div>
+      <div class="row2">
+        <div class="fg">
+          <label>Course ID (course_id) *</label>
+          <select id="f-course-id">
+            <option value="" disabled selected>Select a course</option>
+            <option value="CRS-ML01">Machine Learning (CRS-ML01)</option>
+            <option value="CRS-DB02">Database Systems (CRS-DB02)</option>
+            <option value="CRS-WD03">Web Development (CRS-WD03)</option>
+            <option value="CRS-AI04">Artificial Intelligence (CRS-AI04)</option>
+            <option value="CRS-DS05">Data Structures (CRS-DS05)</option>
+            <option value="CRS-CN06">Computer Networks (CRS-CN06)</option>
+            <option value="CRS-OS07">Operating Systems (CRS-OS07)</option>
+            <option value="CRS-CA08">Cloud Architecture (CRS-CA08)</option>
+          </select>
+          <div class="err-msg">Select a course.</div>
+        </div>
+        <div class="fg">
+          <label>Semester (semester) *</label>
+          <select id="f-sem">
+            <option value="" disabled selected>Select semester</option>
+            <option>Semester 1</option><option>Semester 2</option>
+            <option>Semester 3</option><option>Semester 4</option>
+            <option>Semester 5</option><option>Semester 6</option>
+            <option>Semester 7</option><option>Semester 8</option>
+          </select>
+          <div class="err-msg">Select semester.</div>
+        </div>
       </div>
       <div class="row2">
         <div class="fg">
-          <label>Semester *</label>
-          <select id="f-sem"><option value="" disabled selected>Select semester</option><option>Semester 1</option><option>Semester 2</option><option>Semester 3</option><option>Semester 4</option><option>Semester 5</option><option>Semester 6</option><option>Semester 7</option><option>Semester 8</option></select>
-          <div class="err-msg">Select semester.</div>
+          <label>Year (year) *</label>
+          <select id="f-year">
+            <option value="" disabled selected>Select year</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+          </select>
+          <div class="err-msg">Select year.</div>
         </div>
         <div class="fg">
-          <label>Academic Year *</label>
-          <select id="f-year"><option value="" disabled selected>Select year</option><option>2024 – 2025</option><option>2025 – 2026</option><option>2026 – 2027</option></select>
-          <div class="err-msg">Select year.</div>
+          <label>Registration Date (registration_date) *</label>
+          <input type="date" id="f-reg-date">
+          <div class="err-msg">Select registration date.</div>
         </div>
       </div>
       <div class="fg">
-        <label>Mode of Study</label>
-        <div class="radio-group" id="mode-group">
-          <div class="chip on" data-val="On-Campus"><span class="chip-dot"></span> On-Campus</div>
-          <div class="chip" data-val="Online"><span class="chip-dot"></span> Online</div>
-          <div class="chip" data-val="Hybrid"><span class="chip-dot"></span> Hybrid</div>
+        <label>Expected Grade (grade) <span style="color:var(--muted);font-size:10px;letter-spacing:0">(optional — char)</span></label>
+        <div class="radio-group" id="grade-group">
+          <div class="chip on" data-val="—"><span class="chip-dot"></span> Not yet</div>
+          <div class="chip" data-val="A"><span class="chip-dot"></span> A</div>
+          <div class="chip" data-val="B"><span class="chip-dot"></span> B</div>
+          <div class="chip" data-val="C"><span class="chip-dot"></span> C</div>
+          <div class="chip" data-val="D"><span class="chip-dot"></span> D</div>
+          <div class="chip" data-val="F"><span class="chip-dot"></span> F</div>
         </div>
       </div>
     </div>
+
+    <!-- TERMS -->
     <div class="form-sec">
-      <div class="sec-title">Additional Info</div>
-      <div class="fg"><label>Goals / Reason (optional)</label><textarea id="f-reason" placeholder="Why do you want to take this course?"></textarea></div>
+      <div class="sec-title">Confirmation</div>
       <div class="check-row" id="terms-row">
         <div class="check-box" id="terms-box"></div>
-        <span>I agree to the <u style="color:var(--teal-light);cursor:pointer">Terms &amp; Conditions</u> and confirm all information is accurate. *</span>
+        <span>I agree to the <u style="color:var(--teal-light);cursor:pointer">Terms &amp; Conditions</u> and confirm all information provided is accurate. *</span>
       </div>
       <div class="err-msg" id="terms-err" style="margin-top:5px">You must accept the terms.</div>
     </div>
+
     <div class="form-actions">
       <button class="btn-submit" id="btn-submit">✦ Submit Registration</button>
       <button class="btn-cancel" id="btn-cancel">✕ Cancel</button>
@@ -366,11 +410,14 @@ html, body {
   <p class="sub-p">Your course registration has been submitted successfully. A confirmation email will be sent shortly.</p>
   <div class="reg-id" id="reg-id-display">Registration ID: —</div>
   <div class="s-details">
-    <div class="s-det"><div class="s-det-lbl">Student</div><div class="s-det-val" id="sd-name">—</div></div>
-    <div class="s-det"><div class="s-det-lbl">Course</div><div class="s-det-val" id="sd-course">—</div></div>
+    <div class="s-det"><div class="s-det-lbl">Student ID</div><div class="s-det-val" id="sd-sid">—</div></div>
+    <div class="s-det"><div class="s-det-lbl">Name</div><div class="s-det-val" id="sd-name">—</div></div>
+    <div class="s-det"><div class="s-det-lbl">Course ID</div><div class="s-det-val" id="sd-course">—</div></div>
     <div class="s-det"><div class="s-det-lbl">Department</div><div class="s-det-val" id="sd-dept">—</div></div>
-    <div class="s-det"><div class="s-det-lbl">Mode</div><div class="s-det-val" id="sd-mode">—</div></div>
     <div class="s-det"><div class="s-det-lbl">Semester</div><div class="s-det-val" id="sd-sem">—</div></div>
+    <div class="s-det"><div class="s-det-lbl">Year</div><div class="s-det-val" id="sd-year">—</div></div>
+    <div class="s-det"><div class="s-det-lbl">Reg. Date</div><div class="s-det-val" id="sd-regdate">—</div></div>
+    <div class="s-det"><div class="s-det-lbl">Grade</div><div class="s-det-val" id="sd-grade">—</div></div>
   </div>
   <button class="btn-home" id="btn-home">← Back to Home</button>
 </div>
@@ -439,10 +486,10 @@ function goTo(toId, color) {
   },380);
 }
 
-// ── Chips ──
-document.querySelectorAll('#mode-group .chip').forEach(function(ch){
+// ── Chips (grade group) ──
+document.querySelectorAll('#grade-group .chip').forEach(function(ch){
   ch.addEventListener('click',function(){
-    document.querySelectorAll('#mode-group .chip').forEach(function(c){c.classList.remove('on');});
+    document.querySelectorAll('#grade-group .chip').forEach(function(c){c.classList.remove('on');});
     ch.classList.add('on');
   });
 });
@@ -459,7 +506,7 @@ document.getElementById('terms-row').addEventListener('click',function(){
 });
 
 // ── Progress ──
-var trackIds=['f-fname','f-lname','f-dob','f-email','f-phone','f-dept','f-course','f-sem','f-year'];
+var trackIds=['f-student-id','f-name','f-email','f-phone','f-dob','f-dept','f-course-id','f-sem','f-year','f-reg-date'];
 function updateProgress(){
   var n=trackIds.filter(function(id){var e=document.getElementById(id);return e&&e.value.trim()!=='';}).length;
   if(termsOk) n++;
@@ -478,15 +525,16 @@ function vf(id,fn){
 }
 function validate(){
   var ok=true;
-  if(!vf('f-fname',function(v){return v.trim().length>0;})) ok=false;
-  if(!vf('f-lname',function(v){return v.trim().length>0;})) ok=false;
-  if(!vf('f-dob',  function(v){return v.trim().length>0;})) ok=false;
-  if(!vf('f-email',function(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);})) ok=false;
-  if(!vf('f-phone',function(v){return v.trim().length>=7;})) ok=false;
-  if(!vf('f-dept', function(v){return v!=='';})) ok=false;
-  if(!vf('f-course',function(v){return v.trim().length>0;})) ok=false;
-  if(!vf('f-sem',  function(v){return v!=='';})) ok=false;
-  if(!vf('f-year', function(v){return v!=='';})) ok=false;
+  if(!vf('f-student-id',function(v){return v.trim().length>0;})) ok=false;
+  if(!vf('f-name',      function(v){return v.trim().length>0;})) ok=false;
+  if(!vf('f-email',     function(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);})) ok=false;
+  if(!vf('f-phone',     function(v){return v.trim().length>=7;})) ok=false;
+  if(!vf('f-dob',       function(v){return v.trim().length>0;})) ok=false;
+  if(!vf('f-dept',      function(v){return v!=='';})) ok=false;
+  if(!vf('f-course-id', function(v){return v!=='';})) ok=false;
+  if(!vf('f-sem',       function(v){return v!=='';})) ok=false;
+  if(!vf('f-year',      function(v){return v!=='';})) ok=false;
+  if(!vf('f-reg-date',  function(v){return v.trim().length>0;})) ok=false;
   if(!termsOk){
     document.getElementById('terms-err').style.display='block';
     document.getElementById('terms-box').classList.add('err-box');
@@ -501,15 +549,18 @@ trackIds.forEach(function(id){
 
 // ── Fill success ──
 function fillSuccess(){
-  var fname=document.getElementById('f-fname').value;
-  var lname=document.getElementById('f-lname').value;
   var rid='REG-'+Date.now().toString(36).toUpperCase().slice(-8);
   document.getElementById('reg-id-display').textContent='Registration ID: '+rid;
-  document.getElementById('sd-name').textContent=fname+' '+lname;
-  document.getElementById('sd-course').textContent=document.getElementById('f-course').value||'—';
-  document.getElementById('sd-dept').textContent=document.getElementById('f-dept').value||'—';
-  document.getElementById('sd-mode').textContent=(document.querySelector('#mode-group .chip.on')||{}).dataset&&document.querySelector('#mode-group .chip.on').dataset.val||'—';
+  document.getElementById('sd-sid').textContent=document.getElementById('f-student-id').value||'—';
+  document.getElementById('sd-name').textContent=document.getElementById('f-name').value||'—';
+  document.getElementById('sd-course').textContent=document.getElementById('f-course-id').value||'—';
+  var deptSel=document.getElementById('f-dept');
+  document.getElementById('sd-dept').textContent=deptSel.options[deptSel.selectedIndex]?deptSel.options[deptSel.selectedIndex].text:'—';
   document.getElementById('sd-sem').textContent=document.getElementById('f-sem').value||'—';
+  document.getElementById('sd-year').textContent=document.getElementById('f-year').value||'—';
+  document.getElementById('sd-regdate').textContent=document.getElementById('f-reg-date').value||'—';
+  var gradeChip=document.querySelector('#grade-group .chip.on');
+  document.getElementById('sd-grade').textContent=gradeChip?gradeChip.dataset.val:'—';
 }
 
 // ── Confetti ──
@@ -532,16 +583,25 @@ function resetForm(){
     var el=document.getElementById(id);
     if(el){el.value='';el.classList.remove('err');var fg=el.closest('.fg');if(fg)fg.classList.remove('has-err');}
   });
-  document.getElementById('f-reason').value='';
   termsOk=false;
   var b=document.getElementById('terms-box');
   b.classList.remove('on','err-box');
   document.getElementById('terms-err').style.display='none';
-  document.querySelectorAll('#mode-group .chip').forEach(function(c,i){c.classList.toggle('on',i===0);});
+  document.querySelectorAll('#grade-group .chip').forEach(function(c,i){c.classList.toggle('on',i===0);});
   document.getElementById('prog-fill').style.width='0%';
+  var today=new Date().toISOString().split('T')[0];
+  var rd=document.getElementById('f-reg-date');
+  if(rd) rd.value=today;
 }
 
 // ── Nav ──
+// Set today as default reg date
+(function(){
+  var today=new Date().toISOString().split('T')[0];
+  var rd=document.getElementById('f-reg-date');
+  if(rd) rd.value=today;
+})();
+
 document.getElementById('btn-go-form').addEventListener('click',function(){goTo('page-form','rgba(42,181,181,0.55)');});
 document.getElementById('btn-submit').addEventListener('click',function(){if(!validate())return;fillSuccess();goTo('page-success','rgba(42,181,181,0.65)');setTimeout(confetti,650);});
 document.getElementById('btn-cancel').addEventListener('click',function(){goTo('page-cancel','rgba(196,97,74,0.55)');});
