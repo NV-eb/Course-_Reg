@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduVerse — Course Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink: #080c14;
+  --cream: #f2ede4;
+  --gold: #c9a84c;
+  --teal: #1a6b6b;
+  --teal-light: #2ab5b5;
+  --rose: #c4614a;
+  --muted: #7a7570;
+}
+
+html, body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--ink);
+  color: var(--cream);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── PAGE SYSTEM ─── */
+.page { display: none; min-height: 100vh; position: relative; overflow: hidden; }
+.page.active { display: block; }
+#page-landing.active,
+#page-success.active,
+#page-cancel.active { display: flex; }
+#page-form.active { display: flex; }
+
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page.active { animation: pageFadeIn 0.5s cubic-bezier(.22,1,.36,1) forwards; }
+
+/* ── ORBS ── */
+.bg-orb {
+  position: absolute; border-radius: 50%;
+  pointer-events: none; filter: blur(80px); z-index: 0;
+}
+@keyframes orbFloat {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33%      { transform: translate(22px,-32px) scale(1.06); }
+  66%      { transform: translate(-16px,16px) scale(0.94); }
+}
+
+/* ══════════════════════════
+   PAGE 1 — LANDING
+══════════════════════════ */
+#page-landing {
+  background: radial-gradient(ellipse 90% 70% at 15% 10%, #0d2020 0%, #080c14 55%),
+              radial-gradient(ellipse 60% 60% at 85% 90%, #15152a 0%, transparent 55%);
+  flex-direction: column; align-items: center; justify-content: center;
+  padding: 60px 20px 80px; text-align: center;
+}
+#page-landing .o1 { width:480px;height:480px; background:radial-gradient(circle,rgba(26,107,107,0.4),transparent 70%); top:-120px;right:-100px; animation:orbFloat 14s ease-in-out infinite; }
+#page-landing .o2 { width:360px;height:360px; background:radial-gradient(circle,rgba(201,168,76,0.25),transparent 70%); bottom:-80px;left:-80px; animation:orbFloat 18s ease-in-out infinite reverse; }
+#page-landing .o3 { width:200px;height:200px; background:radial-gradient(circle,rgba(42,181,181,0.2),transparent 70%); top:50%;left:10%; animation:orbFloat 10s ease-in-out infinite 3s; }
+
+.stars { position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+.star { position:absolute;width:2px;height:2px;border-radius:50%;animation:twinkle linear infinite; }
+@keyframes twinkle { 0%,100%{opacity:0.1;transform:scale(1)} 50%{opacity:0.9;transform:scale(1.6)} }
+
+.landing-content { position:relative;z-index:1;max-width:740px;width:100%; }
+
+.badge {
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);
+  border-radius:100px;padding:6px 18px;
+  font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);
+  margin-bottom:36px; animation:fadeDown 0.7s 0.1s both;
+}
+.badge-dot { width:7px;height:7px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+
+.hero-title {
+  font-family:'Playfair Display',serif;font-size:clamp(52px,10vw,112px);
+  line-height:0.92;font-weight:900;margin-bottom:10px;animation:fadeDown 0.7s 0.25s both;
+}
+.hero-title .l1 { display:block;color:var(--cream); }
+.hero-title .l2 {
+  display:block;
+  background:linear-gradient(120deg,var(--gold) 0%,var(--teal-light) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.hero-sub { font-size:clamp(14px,2vw,17px);color:var(--muted);line-height:1.75;max-width:500px;margin:32px auto 52px;animation:fadeDown 0.7s 0.4s both; }
+
+.features { display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:60px;animation:fadeDown 0.7s 0.55s both; }
+.feat-card {
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);
+  border-radius:18px;padding:20px 24px;width:148px;text-align:center;
+  backdrop-filter:blur(12px);transition:transform 0.3s,border-color 0.3s,background 0.3s;cursor:default;
+}
+.feat-card:hover { transform:translateY(-8px);border-color:rgba(201,168,76,0.35);background:rgba(201,168,76,0.06); }
+.feat-icon { font-size:30px;display:block;margin-bottom:10px; }
+.feat-label { font-size:12px;font-weight:500;color:rgba(242,237,228,0.6); }
+
+.cta-btn {
+  position:relative;display:inline-flex;align-items:center;gap:14px;
+  background:linear-gradient(135deg,#d4a83a 0%,#b87a20 100%);
+  color:#1a0e00;font-family:'DM Sans',sans-serif;font-size:17px;font-weight:800;
+  padding:20px 52px;border:none;border-radius:100px;cursor:pointer;overflow:hidden;
+  box-shadow:0 8px 48px rgba(201,168,76,0.4),0 2px 8px rgba(0,0,0,0.4);
+  animation:fadeDown 0.7s 0.7s both;transition:transform 0.25s,box-shadow 0.25s;
+}
+.cta-btn::after { content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.25),transparent);opacity:0;transition:opacity 0.3s; }
+.cta-btn:hover { transform:translateY(-4px) scale(1.04);box-shadow:0 18px 64px rgba(201,168,76,0.55); }
+.cta-btn:hover::after { opacity:1; }
+.cta-btn:active { transform:scale(0.97); }
+.cta-arrow { width:30px;height:30px;background:rgba(0,0,0,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;transition:transform 0.3s; }
+.cta-btn:hover .cta-arrow { transform:translateX(5px); }
+
+@keyframes fadeDown { from{opacity:0;transform:translateY(-22px)} to{opacity:1;transform:translateY(0)} }
+
+/* ══════════════════════════
+   PAGE 2 — FORM
+══════════════════════════ */
+#page-form {
+  background:linear-gradient(160deg,#080c14 0%,#0a1a1a 50%,#080c14 100%);
+  flex-direction:column;align-items:center;padding:60px 20px 100px;
+}
+#page-form .o1 { width:400px;height:400px;background:radial-gradient(circle,rgba(26,107,107,0.3),transparent 70%);top:0;right:0;animation:orbFloat 16s ease-in-out infinite; }
+#page-form .o2 { width:300px;height:300px;background:radial-gradient(circle,rgba(201,168,76,0.15),transparent 70%);bottom:10%;left:-60px;animation:orbFloat 20s ease-in-out infinite reverse; }
+
+.form-header { text-align:center;max-width:620px;margin-bottom:40px;position:relative;z-index:1; }
+.step-label { display:inline-block;background:rgba(42,181,181,0.12);border:1px solid rgba(42,181,181,0.3);color:var(--teal-light);font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;padding:5px 16px;border-radius:100px;margin-bottom:18px; }
+.form-header h2 { font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,50px);font-weight:800;color:var(--cream);margin-bottom:12px; }
+.form-header p { color:var(--muted);font-size:15px;line-height:1.65; }
+
+.prog-track { width:100%;max-width:620px;height:3px;background:rgba(255,255,255,0.07);border-radius:10px;margin-bottom:36px;overflow:hidden;position:relative;z-index:1; }
+.prog-fill { height:100%;width:0%;background:linear-gradient(90deg,var(--teal-light),var(--gold));border-radius:10px;transition:width 0.5s cubic-bezier(.77,0,.18,1); }
+
+.form-card {
+  width:100%;max-width:620px;background:rgba(255,255,255,0.035);
+  border:1px solid rgba(255,255,255,0.08);border-radius:26px;
+  padding:44px 40px;position:relative;z-index:1;backdrop-filter:blur(20px);
+}
+.form-card::before { content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.5),transparent);border-radius:100px; }
+
+.sec-title { font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin:0 0 18px;display:flex;align-items:center;gap:12px; }
+.sec-title::after { content:'';flex:1;height:1px;background:rgba(201,168,76,0.18); }
+.form-sec { margin-bottom:32px; }
+
+.row2 { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+
+.fg { margin-bottom:16px;position:relative; }
+.fg label { display:block;font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:rgba(242,237,228,0.45);margin-bottom:7px; }
+.fg input,.fg select,.fg textarea {
+  width:100%;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.09);
+  border-radius:12px;padding:13px 16px;color:var(--cream);
+  font-family:'DM Sans',sans-serif;font-size:14px;outline:none;
+  transition:border-color 0.25s,background 0.25s,box-shadow 0.25s;
+  -webkit-appearance:none;appearance:none;
+}
+.fg select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%237a7570' d='M5 7L0 2h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;cursor:pointer; }
+.fg select option { background:#0e1a1a;color:var(--cream); }
+.fg textarea { resize:none;height:88px; }
+.fg input::placeholder,.fg textarea::placeholder { color:rgba(242,237,228,0.18); }
+.fg input:focus,.fg select:focus,.fg textarea:focus { border-color:var(--teal-light);background:rgba(42,181,181,0.07);box-shadow:0 0 0 4px rgba(42,181,181,0.1); }
+.fg input.err,.fg select.err { border-color:rgba(196,97,74,0.6)!important;animation:shake 0.35s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-5px)} 40%,80%{transform:translateX(5px)} }
+.err-msg { font-size:11px;color:var(--rose);margin-top:4px;display:none; }
+.has-err .err-msg { display:block; }
+
+.radio-group { display:flex;gap:10px;flex-wrap:wrap; }
+.chip { display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.09);border-radius:10px;padding:10px 16px;font-size:13px;font-weight:500;color:rgba(242,237,228,0.55);cursor:pointer;user-select:none;transition:all 0.22s; }
+.chip:hover { border-color:rgba(42,181,181,0.35);color:var(--cream); }
+.chip.on { background:rgba(42,181,181,0.12);border-color:var(--teal-light);color:var(--teal-light); }
+.chip-dot { width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.2);transition:background 0.22s; }
+.chip.on .chip-dot { background:var(--teal-light); }
+
+.check-row { display:flex;align-items:flex-start;gap:12px;font-size:13px;color:var(--muted);line-height:1.55;cursor:pointer; }
+.check-box { min-width:20px;width:20px;height:20px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.12);border-radius:6px;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all 0.22s;flex-shrink:0; }
+.check-box.on { background:var(--teal-light);border-color:var(--teal-light); }
+.check-box.on::after { content:'✓';color:white;font-size:12px;font-weight:800; }
+.check-box.err-box { border-color:var(--rose)!important; }
+
+.form-actions { display:flex;gap:14px;margin-top:34px; }
+.btn-submit { flex:1;padding:16px;background:linear-gradient(135deg,#1a6b6b 0%,#2ab5b5 100%);color:white;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;box-shadow:0 6px 30px rgba(26,107,107,0.45);transition:transform 0.2s,box-shadow 0.2s;position:relative;overflow:hidden; }
+.btn-submit::before { content:'';position:absolute;inset:0;background:rgba(255,255,255,0.1);opacity:0;transition:opacity 0.3s; }
+.btn-submit:hover { transform:translateY(-2px);box-shadow:0 14px 44px rgba(26,107,107,0.55); }
+.btn-submit:hover::before { opacity:1; }
+.btn-submit:active { transform:scale(0.97); }
+
+.btn-cancel { padding:16px 26px;background:rgba(196,97,74,0.08);color:var(--rose);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;border:1.5px solid rgba(196,97,74,0.22);border-radius:14px;cursor:pointer;transition:all 0.22s; }
+.btn-cancel:hover { background:rgba(196,97,74,0.18);border-color:rgba(196,97,74,0.5);transform:translateY(-2px); }
+
+/* ══════════════════════════
+   PAGE 3 — SUCCESS
+══════════════════════════ */
+#page-success {
+  background:radial-gradient(ellipse 80% 80% at 50% 40%,#0a2418 0%,#080c14 60%);
+  flex-direction:column;align-items:center;justify-content:center;
+  padding:60px 20px;text-align:center;
+}
+#page-success .o1 { width:500px;height:500px;background:radial-gradient(circle,rgba(26,107,107,0.3),transparent 70%);top:-80px;left:50%;transform:translateX(-50%);animation:orbFloat 12s ease-in-out infinite; }
+
+.s-ring { width:150px;height:150px;border-radius:50%;background:rgba(42,181,181,0.1);border:2px solid rgba(42,181,181,0.3);display:flex;align-items:center;justify-content:center;margin-bottom:36px;position:relative;z-index:1;animation:popIn 0.6s 0.1s cubic-bezier(.34,1.56,.64,1) both; }
+.s-ring::before { content:'';position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(42,181,181,0.12);animation:ringPulse 2.5s 0.7s infinite; }
+.s-ring::after { content:'';position:absolute;inset:-28px;border-radius:50%;border:1px solid rgba(42,181,181,0.06);animation:ringPulse 2.5s 1s infinite; }
+.s-icon { width:76px;height:76px;background:linear-gradient(135deg,var(--teal) 0%,var(--teal-light) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 8px 30px rgba(42,181,181,0.4); }
+@keyframes popIn { from{transform:scale(0.2);opacity:0} to{transform:scale(1);opacity:1} }
+@keyframes ringPulse { 0%,100%{transform:scale(1);opacity:0.5} 50%{transform:scale(1.15);opacity:0} }
+
+#page-success h2 { font-family:'Playfair Display',serif;font-size:clamp(38px,7vw,64px);font-weight:900;color:var(--cream);margin-bottom:14px;position:relative;z-index:1;animation:fadeDown 0.6s 0.4s both; }
+#page-success .sub-p { color:var(--muted);font-size:16px;max-width:420px;line-height:1.7;margin-bottom:10px;position:relative;z-index:1;animation:fadeDown 0.6s 0.55s both; }
+
+.reg-id { background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:11px 24px;font-size:13px;font-weight:600;color:var(--gold);letter-spacing:1px;margin:22px 0 44px;position:relative;z-index:1;animation:fadeDown 0.6s 0.7s both; }
+
+.s-details { display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-bottom:48px;position:relative;z-index:1;animation:fadeDown 0.6s 0.8s both; }
+.s-det { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:16px 24px;min-width:130px; }
+.s-det-lbl { font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px; }
+.s-det-val { font-size:14px;font-weight:600;color:var(--cream); }
+
+.btn-home { display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#d4a83a 0%,#b87a20 100%);color:#1a0e00;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;padding:16px 44px;border:none;border-radius:100px;cursor:pointer;box-shadow:0 8px 36px rgba(201,168,76,0.35);transition:transform 0.22s,box-shadow 0.22s;position:relative;z-index:1;animation:fadeDown 0.6s 0.95s both; }
+.btn-home:hover { transform:translateY(-3px) scale(1.04);box-shadow:0 18px 54px rgba(201,168,76,0.5); }
+
+/* Confetti */
+.conf { position:fixed;border-radius:2px;pointer-events:none;z-index:999;animation:confFall linear forwards; }
+@keyframes confFall { 0%{transform:translateY(-20px) rotate(0deg) scaleX(1);opacity:1} 80%{opacity:1} 100%{transform:translateY(100vh) rotate(800deg) scaleX(0.5);opacity:0} }
+
+/* ══════════════════════════
+   PAGE 4 — CANCELLED
+══════════════════════════ */
+#page-cancel {
+  background:radial-gradient(ellipse 80% 80% at 50% 40%,#1a0808 0%,#080c14 60%);
+  flex-direction:column;align-items:center;justify-content:center;
+  padding:60px 20px;text-align:center;
+}
+.c-ring { width:150px;height:150px;border-radius:50%;background:rgba(196,97,74,0.1);border:2px solid rgba(196,97,74,0.3);display:flex;align-items:center;justify-content:center;margin-bottom:36px;z-index:1;animation:popIn 0.6s 0.1s cubic-bezier(.34,1.56,.64,1) both; }
+.c-icon { width:76px;height:76px;background:linear-gradient(135deg,#b84030 0%,#e07048 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 8px 30px rgba(196,97,74,0.4); }
+#page-cancel h2 { font-family:'Playfair Display',serif;font-size:clamp(34px,6vw,56px);font-weight:900;color:var(--cream);margin-bottom:14px;z-index:1;animation:fadeDown 0.6s 0.4s both; }
+#page-cancel .sub-p { color:var(--muted);font-size:16px;max-width:400px;line-height:1.7;margin-bottom:48px;z-index:1;animation:fadeDown 0.6s 0.55s both; }
+.btn-back { display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,0.05);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;padding:16px 44px;border:1.5px solid rgba(255,255,255,0.1);border-radius:100px;cursor:pointer;transition:all 0.22s;z-index:1;animation:fadeDown 0.6s 0.7s both; }
+.btn-back:hover { background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.25);transform:translateY(-3px); }
+
+/* ── RIPPLE TRANSITION ── */
+#ripple-wrap { position:fixed;inset:0;z-index:9999;pointer-events:none;display:none;overflow:hidden; }
+#ripple-circle { position:absolute;border-radius:50%;transform:scale(0); }
+
+@media(max-width:580px) {
+  .row2 { grid-template-columns:1fr; }
+  .form-card { padding:28px 18px; }
+  .features { gap:10px; }
+  .feat-card { width:120px;padding:16px 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- RIPPLE -->
+<div id="ripple-wrap"><div id="ripple-circle"></div></div>
+
+<!-- ═══════ PAGE 1: LANDING ═══════ -->
+<div class="page active" id="page-landing">
+  <div class="bg-orb o1"></div>
+  <div class="bg-orb o2"></div>
+  <div class="bg-orb o3"></div>
+  <div class="stars" id="stars-1"></div>
+  <div class="landing-content">
+    <div class="badge"><span class="badge-dot"></span> Academic Year 2025–26</div>
+    <h1 class="hero-title">
+      <span class="l1">EduVerse</span>
+      <span class="l2">Learning Hub</span>
+    </h1>
+    <p class="hero-sub">Enroll in world-class courses, shape your academic journey, and unlock your full potential with a seamless registration experience.</p>
+    <div class="features">
+      <div class="feat-card"><span class="feat-icon">🎓</span><div class="feat-label">200+ Courses</div></div>
+      <div class="feat-card"><span class="feat-icon">🌐</span><div class="feat-label">Online &amp; Campus</div></div>
+      <div class="feat-card"><span class="feat-icon">⚡</span><div class="feat-label">Instant Confirm</div></div>
+      <div class="feat-card"><span class="feat-icon">🏆</span><div class="feat-label">Certified</div></div>
+    </div>
+    <button class="cta-btn" id="btn-go-form">Reg. a Course <span class="cta-arrow">→</span></button>
+  </div>
+</div>
+
+<!-- ═══════ PAGE 2: FORM ═══════ -->
+<div class="page" id="page-form">
+  <div class="bg-orb o1"></div>
+  <div class="bg-orb o2"></div>
+  <div class="form-header">
+    <div class="step-label">✦ New Enrollment</div>
+    <h2>Course Registration</h2>
+    <p>Fill in your details carefully. Fields marked <span style="color:var(--gold)">*</span> are required.</p>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+  <div class="form-card">
+    <div class="form-sec">
+      <div class="sec-title">Personal Information</div>
+      <div class="row2">
+        <div class="fg"><label>First Name *</label><input type="text" id="f-fname" placeholder="e.g. Aryan"><div class="err-msg">Enter your first name.</div></div>
+        <div class="fg"><label>Last Name *</label><input type="text" id="f-lname" placeholder="e.g. Sharma"><div class="err-msg">Enter your last name.</div></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Date of Birth *</label><input type="date" id="f-dob"><div class="err-msg">Required.</div></div>
+        <div class="fg"><label>Student ID</label><input type="text" id="f-sid" placeholder="e.g. STU-2024-001"></div>
+      </div>
+    </div>
+    <div class="form-sec">
+      <div class="sec-title">Contact Details</div>
+      <div class="row2">
+        <div class="fg"><label>Email Address *</label><input type="email" id="f-email" placeholder="you@example.com"><div class="err-msg">Enter a valid email.</div></div>
+        <div class="fg"><label>Phone Number *</label><input type="tel" id="f-phone" placeholder="+91 9XXXXXXXXX"><div class="err-msg">Enter phone number.</div></div>
+      </div>
+    </div>
+    <div class="form-sec">
+      <div class="sec-title">Course Details</div>
+      <div class="row2">
+        <div class="fg">
+          <label>Department *</label>
+          <select id="f-dept"><option value="" disabled selected>Select department</option><option>Computer Science</option><option>Electrical Engineering</option><option>Business &amp; Management</option><option>Design &amp; Arts</option><option>Data Science &amp; AI</option><option>Life Sciences</option><option>Mathematics</option></select>
+          <div class="err-msg">Select a department.</div>
+        </div>
+        <div class="fg"><label>Course Name *</label><input type="text" id="f-course" placeholder="e.g. Machine Learning"><div class="err-msg">Enter course name.</div></div>
+      </div>
+      <div class="row2">
+        <div class="fg">
+          <label>Semester *</label>
+          <select id="f-sem"><option value="" disabled selected>Select semester</option><option>Semester 1</option><option>Semester 2</option><option>Semester 3</option><option>Semester 4</option><option>Semester 5</option><option>Semester 6</option><option>Semester 7</option><option>Semester 8</option></select>
+          <div class="err-msg">Select semester.</div>
+        </div>
+        <div class="fg">
+          <label>Academic Year *</label>
+          <select id="f-year"><option value="" disabled selected>Select year</option><option>2024 – 2025</option><option>2025 – 2026</option><option>2026 – 2027</option></select>
+          <div class="err-msg">Select year.</div>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Mode of Study</label>
+        <div class="radio-group" id="mode-group">
+          <div class="chip on" data-val="On-Campus"><span class="chip-dot"></span> On-Campus</div>
+          <div class="chip" data-val="Online"><span class="chip-dot"></span> Online</div>
+          <div class="chip" data-val="Hybrid"><span class="chip-dot"></span> Hybrid</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-sec">
+      <div class="sec-title">Additional Info</div>
+      <div class="fg"><label>Goals / Reason (optional)</label><textarea id="f-reason" placeholder="Why do you want to take this course?"></textarea></div>
+      <div class="check-row" id="terms-row">
+        <div class="check-box" id="terms-box"></div>
+        <span>I agree to the <u style="color:var(--teal-light);cursor:pointer">Terms &amp; Conditions</u> and confirm all information is accurate. *</span>
+      </div>
+      <div class="err-msg" id="terms-err" style="margin-top:5px">You must accept the terms.</div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-submit" id="btn-submit">✦ Submit Registration</button>
+      <button class="btn-cancel" id="btn-cancel">✕ Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ PAGE 3: SUCCESS ═══════ -->
+<div class="page" id="page-success">
+  <div class="bg-orb o1"></div>
+  <div class="s-ring"><div class="s-icon">✓</div></div>
+  <h2>You're Enrolled!</h2>
+  <p class="sub-p">Your course registration has been submitted successfully. A confirmation email will be sent shortly.</p>
+  <div class="reg-id" id="reg-id-display">Registration ID: —</div>
+  <div class="s-details">
+    <div class="s-det"><div class="s-det-lbl">Student</div><div class="s-det-val" id="sd-name">—</div></div>
+    <div class="s-det"><div class="s-det-lbl">Course</div><div class="s-det-val" id="sd-course">—</div></div>
+    <div class="s-det"><div class="s-det-lbl">Department</div><div class="s-det-val" id="sd-dept">—</div></div>
+    <div class="s-det"><div class="s-det-lbl">Mode</div><div class="s-det-val" id="sd-mode">—</div></div>
+    <div class="s-det"><div class="s-det-lbl">Semester</div><div class="s-det-val" id="sd-sem">—</div></div>
+  </div>
+  <button class="btn-home" id="btn-home">← Back to Home</button>
+</div>
+
+<!-- ═══════ PAGE 4: CANCELLED ═══════ -->
+<div class="page" id="page-cancel">
+  <div class="c-ring"><div class="c-icon">✕</div></div>
+  <h2>Registration Cancelled</h2>
+  <p class="sub-p">Your course registration has been cancelled. No information has been saved. You can start over anytime.</p>
+  <button class="btn-back" id="btn-back">← Return to Home</button>
+</div>
+
+<script>
+// ── Stars ──
+(function(){
+  const c = document.getElementById('stars-1');
+  for(let i=0;i<90;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;background:${Math.random()>.6?'rgba(201,168,76,0.9)':'rgba(42,181,181,0.9)'};animation-duration:${2+Math.random()*4}s;animation-delay:${Math.random()*5}s;`;
+    c.appendChild(s);
+  }
+})();
+
+// ── Page switcher with ripple ──
+const rippleWrap = document.getElementById('ripple-wrap');
+const rippleCircle = document.getElementById('ripple-circle');
+const allPages = ['page-landing','page-form','page-success','page-cancel'];
+
+function goTo(toId, color) {
+  color = color || 'rgba(42,181,181,0.7)';
+  const W = window.innerWidth, H = window.innerHeight;
+  const sz = Math.ceil(Math.sqrt(W*W+H*H)*2.3);
+
+  rippleCircle.style.cssText = `
+    width:${sz}px;height:${sz}px;
+    left:${(W-sz)/2}px;top:${(H-sz)/2}px;
+    background:radial-gradient(circle,${color},rgba(8,12,20,0.95) 70%);
+    transform:scale(0);
+    transition:transform 0.52s cubic-bezier(.22,1,.36,1);
+  `;
+  rippleWrap.style.display='block';
+
+  // Force reflow then animate
+  void rippleCircle.offsetWidth;
+  rippleCircle.style.transform='scale(1)';
+
+  setTimeout(function(){
+    allPages.forEach(function(id){
+      const el=document.getElementById(id);
+      el.classList.remove('active');
+    });
+    const toEl=document.getElementById(toId);
+    toEl.classList.add('active');
+    toEl.scrollTop=0;
+
+    // Fade out ripple
+    rippleCircle.style.transition='opacity 0.4s ease';
+    rippleCircle.style.opacity='0';
+
+    setTimeout(function(){
+      rippleWrap.style.display='none';
+      rippleCircle.style.opacity='1';
+      rippleCircle.style.transform='scale(0)';
+    },420);
+  },380);
+}
+
+// ── Chips ──
+document.querySelectorAll('#mode-group .chip').forEach(function(ch){
+  ch.addEventListener('click',function(){
+    document.querySelectorAll('#mode-group .chip').forEach(function(c){c.classList.remove('on');});
+    ch.classList.add('on');
+  });
+});
+
+// ── Terms checkbox ──
+var termsOk=false;
+document.getElementById('terms-row').addEventListener('click',function(){
+  termsOk=!termsOk;
+  var b=document.getElementById('terms-box');
+  b.classList.toggle('on',termsOk);
+  b.classList.remove('err-box');
+  if(termsOk) document.getElementById('terms-err').style.display='none';
+  updateProgress();
+});
+
+// ── Progress ──
+var trackIds=['f-fname','f-lname','f-dob','f-email','f-phone','f-dept','f-course','f-sem','f-year'];
+function updateProgress(){
+  var n=trackIds.filter(function(id){var e=document.getElementById(id);return e&&e.value.trim()!=='';}).length;
+  if(termsOk) n++;
+  document.getElementById('prog-fill').style.width=((n/(trackIds.length+1))*100)+'%';
+}
+trackIds.forEach(function(id){
+  var el=document.getElementById(id);
+  if(el){el.addEventListener('input',updateProgress);el.addEventListener('change',updateProgress);}
+});
+
+// ── Validate ──
+function vf(id,fn){
+  var el=document.getElementById(id),fg=el.closest('.fg'),ok=fn(el.value);
+  el.classList.toggle('err',!ok);fg.classList.toggle('has-err',!ok);
+  return ok;
+}
+function validate(){
+  var ok=true;
+  if(!vf('f-fname',function(v){return v.trim().length>0;})) ok=false;
+  if(!vf('f-lname',function(v){return v.trim().length>0;})) ok=false;
+  if(!vf('f-dob',  function(v){return v.trim().length>0;})) ok=false;
+  if(!vf('f-email',function(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);})) ok=false;
+  if(!vf('f-phone',function(v){return v.trim().length>=7;})) ok=false;
+  if(!vf('f-dept', function(v){return v!=='';})) ok=false;
+  if(!vf('f-course',function(v){return v.trim().length>0;})) ok=false;
+  if(!vf('f-sem',  function(v){return v!=='';})) ok=false;
+  if(!vf('f-year', function(v){return v!=='';})) ok=false;
+  if(!termsOk){
+    document.getElementById('terms-err').style.display='block';
+    document.getElementById('terms-box').classList.add('err-box');
+    ok=false;
+  }
+  return ok;
+}
+trackIds.forEach(function(id){
+  var el=document.getElementById(id);
+  if(el) el.addEventListener('input',function(){el.classList.remove('err');el.closest('.fg')&&el.closest('.fg').classList.remove('has-err');});
+});
+
+// ── Fill success ──
+function fillSuccess(){
+  var fname=document.getElementById('f-fname').value;
+  var lname=document.getElementById('f-lname').value;
+  var rid='REG-'+Date.now().toString(36).toUpperCase().slice(-8);
+  document.getElementById('reg-id-display').textContent='Registration ID: '+rid;
+  document.getElementById('sd-name').textContent=fname+' '+lname;
+  document.getElementById('sd-course').textContent=document.getElementById('f-course').value||'—';
+  document.getElementById('sd-dept').textContent=document.getElementById('f-dept').value||'—';
+  document.getElementById('sd-mode').textContent=(document.querySelector('#mode-group .chip.on')||{}).dataset&&document.querySelector('#mode-group .chip.on').dataset.val||'—';
+  document.getElementById('sd-sem').textContent=document.getElementById('f-sem').value||'—';
+}
+
+// ── Confetti ──
+function confetti(){
+  var cols=['#c9a84c','#2ab5b5','#c4614a','#e8d49a','#4ac9b0','#a84caa','#ffffff'];
+  for(var i=0;i<100;i++){
+    (function(){
+      var el=document.createElement('div');
+      el.className='conf';
+      el.style.cssText='left:'+Math.random()*100+'vw;top:-12px;width:'+(4+Math.random()*8)+'px;height:'+(4+Math.random()*8)+'px;border-radius:'+(Math.random()>.4?'50%':'2px')+';background:'+cols[Math.floor(Math.random()*cols.length)]+';animation:confFall '+(1.4+Math.random()*2)+'s '+(Math.random()*1.2)+'s linear forwards;';
+      document.body.appendChild(el);
+      setTimeout(function(){el.remove();},4000);
+    })();
+  }
+}
+
+// ── Reset ──
+function resetForm(){
+  trackIds.forEach(function(id){
+    var el=document.getElementById(id);
+    if(el){el.value='';el.classList.remove('err');var fg=el.closest('.fg');if(fg)fg.classList.remove('has-err');}
+  });
+  document.getElementById('f-reason').value='';
+  termsOk=false;
+  var b=document.getElementById('terms-box');
+  b.classList.remove('on','err-box');
+  document.getElementById('terms-err').style.display='none';
+  document.querySelectorAll('#mode-group .chip').forEach(function(c,i){c.classList.toggle('on',i===0);});
+  document.getElementById('prog-fill').style.width='0%';
+}
+
+// ── Nav ──
+document.getElementById('btn-go-form').addEventListener('click',function(){goTo('page-form','rgba(42,181,181,0.55)');});
+document.getElementById('btn-submit').addEventListener('click',function(){if(!validate())return;fillSuccess();goTo('page-success','rgba(42,181,181,0.65)');setTimeout(confetti,650);});
+document.getElementById('btn-cancel').addEventListener('click',function(){goTo('page-cancel','rgba(196,97,74,0.55)');});
+document.getElementById('btn-home').addEventListener('click',function(){resetForm();goTo('page-landing','rgba(201,168,76,0.5)');});
+document.getElementById('btn-back').addEventListener('click',function(){resetForm();goTo('page-landing','rgba(201,168,76,0.4)');});
+</script>
+</body>
+</html>
