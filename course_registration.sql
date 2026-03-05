@@ -1,0 +1,56 @@
+-- Course registration system: Database schema 
+DROP TABLE IF EXISTS REGISTRATION;
+DROP TABLE IF EXISTS COURSE;
+DROP TABLE IF EXISTS STUDENT;
+DROP TABLE IF EXISTS FACULTY;
+DROP TABLE IF EXISTS DEPARTMENT;
+
+CREATE TABLE DEPARTMENT (
+    Department_ID VARCHAR(10) PRIMARY KEY,
+    Department_Name VARCHAR(50) NOT NULL,
+    HOD_Name VARCHAR(50),
+    Building VARCHAR(20)
+);
+
+CREATE TABLE FACULTY (
+    Faculty_ID VARCHAR(10) PRIMARY KEY,
+    Faculty_Name VARCHAR(50) NOT NULL,
+    Email VARCHAR(50) UNIQUE,
+    Phone VARCHAR(15),
+    Department_ID VARCHAR(10),
+    Specialization VARCHAR(50),
+    FOREIGN KEY (Department_ID) REFERENCES DEPARTMENT(Department_ID)
+);
+
+CREATE TABLE STUDENT (
+    Student_ID VARCHAR(10) PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL,
+    Email VARCHAR(50) UNIQUE,
+    Phone VARCHAR(15),
+    Date_of_Birth DATE,
+    Department_ID VARCHAR(10),
+    FOREIGN KEY (Department_ID) REFERENCES DEPARTMENT(Department_ID)
+);
+
+CREATE TABLE COURSE (
+    Course_ID VARCHAR(10) PRIMARY KEY,
+    Course_Name VARCHAR(100) NOT NULL,
+    Credits INT CHECK (Credits > 0),
+    Department_ID VARCHAR(10),
+    Faculty_ID VARCHAR(10),
+    Max_Capacity INT,
+    FOREIGN KEY (Department_ID) REFERENCES DEPARTMENT(Department_ID),
+    FOREIGN KEY (Faculty_ID) REFERENCES FACULTY(Faculty_ID)
+);
+
+CREATE TABLE REGISTRATION (
+    Registration_ID VARCHAR(10) PRIMARY KEY,
+    Student_ID VARCHAR(10),
+    Course_ID VARCHAR(10),
+    Semester VARCHAR(20),
+    Year INT,
+    Grade CHAR(2),
+    Registration_Date DATE,
+    FOREIGN KEY (Student_ID) REFERENCES STUDENT(Student_ID),
+    FOREIGN KEY (Course_ID) REFERENCES COURSE(Course_ID)
+);
