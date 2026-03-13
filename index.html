@@ -294,21 +294,21 @@ html, body {
   <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
   <div class="form-card">
 
-    <!-- STUDENT INFO (students table) -->
+    <!-- STUDENT INFO -->
     <div class="form-sec">
       <div class="sec-title">Student Information</div>
       <div class="row2">
-        <div class="fg"><label>Student ID (id) *</label><input type="text" id="f-student-id" placeholder="e.g. STU-2024-001"><div class="err-msg">Enter your student ID.</div></div>
-        <div class="fg"><label>Full Name (name) *</label><input type="text" id="f-name" placeholder="e.g. Aryan Sharma"><div class="err-msg">Enter your full name.</div></div>
+        <div class="fg"><label>Student ID *</label><input type="text" id="f-student-id" placeholder="e.g. STU-2024-001"><div class="err-msg">Enter your student ID.</div></div>
+        <div class="fg"><label>Full Name *</label><input type="text" id="f-name" placeholder="e.g. Aryan Sharma"><div class="err-msg">Enter your full name.</div></div>
       </div>
       <div class="row2">
-        <div class="fg"><label>Email (email) *</label><input type="email" id="f-email" placeholder="you@example.com"><div class="err-msg">Enter a valid email.</div></div>
-        <div class="fg"><label>Phone (phone) *</label><input type="tel" id="f-phone" placeholder="+91 9XXXXXXXXX"><div class="err-msg">Enter phone number.</div></div>
+        <div class="fg"><label>Email *</label><input type="email" id="f-email" placeholder="you@example.com"><div class="err-msg">Enter a valid email.</div></div>
+        <div class="fg"><label>Phone *</label><input type="tel" id="f-phone" placeholder="+91 9XXXXXXXXX"><div class="err-msg">Enter phone number.</div></div>
       </div>
       <div class="row2">
-        <div class="fg"><label>Date of Birth (date_of_birth) *</label><input type="date" id="f-dob"><div class="err-msg">Select your date of birth.</div></div>
+        <div class="fg"><label>Date of Birth *</label><input type="date" id="f-dob"><div class="err-msg">Select your date of birth.</div></div>
         <div class="fg">
-          <label>Department (department_id) *</label>
+          <label>Department *</label>
           <select id="f-dept">
             <option value="" disabled selected>Select department</option>
             <option value="DEPT-CS">Computer Science</option>
@@ -324,12 +324,12 @@ html, body {
       </div>
     </div>
 
-    <!-- REGISTRATION INFO (registrations table) -->
+    <!-- REGISTRATION INFO -->
     <div class="form-sec">
       <div class="sec-title">Registration Details</div>
       <div class="row2">
         <div class="fg">
-          <label>Course ID (course_id) *</label>
+          <label>Course *</label>
           <select id="f-course-id">
             <option value="" disabled selected>Select a course</option>
             <option value="CRS-ML01">Machine Learning (CRS-ML01)</option>
@@ -344,7 +344,7 @@ html, body {
           <div class="err-msg">Select a course.</div>
         </div>
         <div class="fg">
-          <label>Semester (semester) *</label>
+          <label>Semester *</label>
           <select id="f-sem">
             <option value="" disabled selected>Select semester</option>
             <option>Semester 1</option><option>Semester 2</option>
@@ -357,7 +357,7 @@ html, body {
       </div>
       <div class="row2">
         <div class="fg">
-          <label>Year (year) *</label>
+          <label>Year *</label>
           <select id="f-year">
             <option value="" disabled selected>Select year</option>
             <option value="2024">2024</option>
@@ -367,13 +367,13 @@ html, body {
           <div class="err-msg">Select year.</div>
         </div>
         <div class="fg">
-          <label>Registration Date (registration_date) *</label>
+          <label>Registration Date *</label>
           <input type="date" id="f-reg-date">
           <div class="err-msg">Select registration date.</div>
         </div>
       </div>
       <div class="fg">
-        <label>Expected Grade (grade) <span style="color:var(--muted);font-size:10px;letter-spacing:0">(optional — char)</span></label>
+        <label>Expected Grade <span style="color:var(--muted);font-size:10px;letter-spacing:0">(optional)</span></label>
         <div class="radio-group" id="grade-group">
           <div class="chip on" data-val="—"><span class="chip-dot"></span> Not yet</div>
           <div class="chip" data-val="A"><span class="chip-dot"></span> A</div>
@@ -431,182 +431,379 @@ html, body {
 </div>
 
 <script>
-// ── Stars ──
+// ══════════════════════════════════════════════════
+//  LOOKUP DICTIONARIES
+//  These replace form fields for auto-resolved data.
+// ══════════════════════════════════════════════════
+
+// ── TABLE: DEPARTMENT ──
+var DEPARTMENTS = {
+  'DEPT-CS': { Department_ID: 'DEPT-CS', Department_Name: 'Computer Science',      HOD_Name: 'Dr. Rajesh Kumar',   Building: 'Block A' },
+  'DEPT-EE': { Department_ID: 'DEPT-EE', Department_Name: 'Electrical Engineering', HOD_Name: 'Dr. Priya Nair',     Building: 'Block B' },
+  'DEPT-BM': { Department_ID: 'DEPT-BM', Department_Name: 'Business & Management',  HOD_Name: 'Dr. Amit Shah',      Building: 'Block C' },
+  'DEPT-DA': { Department_ID: 'DEPT-DA', Department_Name: 'Design & Arts',          HOD_Name: 'Dr. Sarah Chen',     Building: 'Block D' },
+  'DEPT-AI': { Department_ID: 'DEPT-AI', Department_Name: 'Data Science & AI',      HOD_Name: 'Dr. Meera Pillai',   Building: 'Block E' },
+  'DEPT-LS': { Department_ID: 'DEPT-LS', Department_Name: 'Life Sciences',          HOD_Name: 'Dr. James Wilson',   Building: 'Block F' },
+  'DEPT-MA': { Department_ID: 'DEPT-MA', Department_Name: 'Mathematics',            HOD_Name: 'Dr. Anita Rao',      Building: 'Block G' }
+};
+
+// ── TABLE: FACULTY (7 entries) ──
+var FACULTY = {
+  'FAC-001': { Faculty_ID: 'FAC-001', Faculty_Name: 'Dr. Alan Turing',      Email: 'alan.turing@eduverse.edu',      Phone: '+91-9810001001', Department_ID: 'DEPT-CS', Specialization: 'Machine Learning & AI'         },
+  'FAC-002': { Faculty_ID: 'FAC-002', Faculty_Name: 'Dr. Barbara Liskov',   Email: 'barbara.liskov@eduverse.edu',   Phone: '+91-9810001002', Department_ID: 'DEPT-CS', Specialization: 'Database Systems'              },
+  'FAC-003': { Faculty_ID: 'FAC-003', Faculty_Name: 'Dr. Tim Berners-Lee',  Email: 'tim.berners@eduverse.edu',      Phone: '+91-9810001003', Department_ID: 'DEPT-CS', Specialization: 'Web Technologies'              },
+  'FAC-004': { Faculty_ID: 'FAC-004', Faculty_Name: 'Dr. Yann LeCun',       Email: 'yann.lecun@eduverse.edu',       Phone: '+91-9810001004', Department_ID: 'DEPT-AI', Specialization: 'Artificial Intelligence'       },
+  'FAC-005': { Faculty_ID: 'FAC-005', Faculty_Name: 'Dr. Edsger Dijkstra',  Email: 'edsger.dijkstra@eduverse.edu',  Phone: '+91-9810001005', Department_ID: 'DEPT-CS', Specialization: 'Algorithms & Data Structures'  },
+  'FAC-006': { Faculty_ID: 'FAC-006', Faculty_Name: 'Dr. Vint Cerf',        Email: 'vint.cerf@eduverse.edu',        Phone: '+91-9810001006', Department_ID: 'DEPT-EE', Specialization: 'Computer Networks'             },
+  'FAC-007': { Faculty_ID: 'FAC-007', Faculty_Name: 'Dr. Andrew Tanenbaum', Email: 'andrew.tanenbaum@eduverse.edu', Phone: '+91-9810001007', Department_ID: 'DEPT-CS', Specialization: 'Operating Systems & Cloud'     }
+};
+
+// ── TABLE: COURSE ──
+// Each course carries: Course_Name, Credits, Department_ID, Faculty_ID, Max_Capacity
+var COURSES = {
+  'CRS-ML01': { Course_ID: 'CRS-ML01', Course_Name: 'Machine Learning',    Credits: 4, Department_ID: 'DEPT-AI', Faculty_ID: 'FAC-001', Max_Capacity: 60 },
+  'CRS-DB02': { Course_ID: 'CRS-DB02', Course_Name: 'Database Systems',    Credits: 3, Department_ID: 'DEPT-CS', Faculty_ID: 'FAC-002', Max_Capacity: 50 },
+  'CRS-WD03': { Course_ID: 'CRS-WD03', Course_Name: 'Web Development',     Credits: 3, Department_ID: 'DEPT-CS', Faculty_ID: 'FAC-003', Max_Capacity: 45 },
+  'CRS-AI04': { Course_ID: 'CRS-AI04', Course_Name: 'Artificial Intelligence', Credits: 4, Department_ID: 'DEPT-AI', Faculty_ID: 'FAC-004', Max_Capacity: 55 },
+  'CRS-DS05': { Course_ID: 'CRS-DS05', Course_Name: 'Data Structures',     Credits: 3, Department_ID: 'DEPT-CS', Faculty_ID: 'FAC-005', Max_Capacity: 60 },
+  'CRS-CN06': { Course_ID: 'CRS-CN06', Course_Name: 'Computer Networks',   Credits: 3, Department_ID: 'DEPT-EE', Faculty_ID: 'FAC-006', Max_Capacity: 50 },
+  'CRS-OS07': { Course_ID: 'CRS-OS07', Course_Name: 'Operating Systems',   Credits: 3, Department_ID: 'DEPT-CS', Faculty_ID: 'FAC-007', Max_Capacity: 45 },
+  'CRS-CA08': { Course_ID: 'CRS-CA08', Course_Name: 'Cloud Architecture',  Credits: 3, Department_ID: 'DEPT-CS', Faculty_ID: 'FAC-007', Max_Capacity: 40 }
+};
+
+// ══════════════════════════════════════════════════
+//  STARS
+// ══════════════════════════════════════════════════
 (function(){
-  const c = document.getElementById('stars-1');
-  for(let i=0;i<90;i++){
-    const s=document.createElement('div');
-    s.className='star';
-    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;background:${Math.random()>.6?'rgba(201,168,76,0.9)':'rgba(42,181,181,0.9)'};animation-duration:${2+Math.random()*4}s;animation-delay:${Math.random()*5}s;`;
+  var c = document.getElementById('stars-1');
+  for(var i = 0; i < 90; i++){
+    var s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = 'left:' + Math.random()*100 + '%;top:' + Math.random()*100 + '%;background:' + (Math.random()>.6?'rgba(201,168,76,0.9)':'rgba(42,181,181,0.9)') + ';animation-duration:' + (2+Math.random()*4) + 's;animation-delay:' + (Math.random()*5) + 's;';
     c.appendChild(s);
   }
 })();
 
-// ── Page switcher with ripple ──
-const rippleWrap = document.getElementById('ripple-wrap');
-const rippleCircle = document.getElementById('ripple-circle');
-const allPages = ['page-landing','page-form','page-success','page-cancel'];
+// ══════════════════════════════════════════════════
+//  PAGE SWITCHER (ripple transition)
+// ══════════════════════════════════════════════════
+var rippleWrap   = document.getElementById('ripple-wrap');
+var rippleCircle = document.getElementById('ripple-circle');
+var allPages     = ['page-landing','page-form','page-success','page-cancel'];
 
 function goTo(toId, color) {
   color = color || 'rgba(42,181,181,0.7)';
-  const W = window.innerWidth, H = window.innerHeight;
-  const sz = Math.ceil(Math.sqrt(W*W+H*H)*2.3);
+  var W = window.innerWidth, H = window.innerHeight;
+  var sz = Math.ceil(Math.sqrt(W*W + H*H) * 2.3);
 
-  rippleCircle.style.cssText = `
-    width:${sz}px;height:${sz}px;
-    left:${(W-sz)/2}px;top:${(H-sz)/2}px;
-    background:radial-gradient(circle,${color},rgba(8,12,20,0.95) 70%);
-    transform:scale(0);
-    transition:transform 0.52s cubic-bezier(.22,1,.36,1);
-  `;
-  rippleWrap.style.display='block';
-
-  // Force reflow then animate
+  rippleCircle.style.cssText = [
+    'width:' + sz + 'px', 'height:' + sz + 'px',
+    'left:' + ((W-sz)/2) + 'px', 'top:' + ((H-sz)/2) + 'px',
+    'background:radial-gradient(circle,' + color + ',rgba(8,12,20,0.95) 70%)',
+    'transform:scale(0)',
+    'transition:transform 0.52s cubic-bezier(.22,1,.36,1)'
+  ].join(';');
+  rippleWrap.style.display = 'block';
   void rippleCircle.offsetWidth;
-  rippleCircle.style.transform='scale(1)';
+  rippleCircle.style.transform = 'scale(1)';
 
   setTimeout(function(){
-    allPages.forEach(function(id){
-      const el=document.getElementById(id);
-      el.classList.remove('active');
-    });
-    const toEl=document.getElementById(toId);
+    allPages.forEach(function(id){ document.getElementById(id).classList.remove('active'); });
+    var toEl = document.getElementById(toId);
     toEl.classList.add('active');
-    toEl.scrollTop=0;
-
-    // Fade out ripple
-    rippleCircle.style.transition='opacity 0.4s ease';
-    rippleCircle.style.opacity='0';
-
+    toEl.scrollTop = 0;
+    rippleCircle.style.transition = 'opacity 0.4s ease';
+    rippleCircle.style.opacity = '0';
     setTimeout(function(){
-      rippleWrap.style.display='none';
-      rippleCircle.style.opacity='1';
-      rippleCircle.style.transform='scale(0)';
-    },420);
-  },380);
+      rippleWrap.style.display = 'none';
+      rippleCircle.style.opacity = '1';
+      rippleCircle.style.transform = 'scale(0)';
+    }, 420);
+  }, 380);
 }
 
-// ── Chips (grade group) ──
+// ══════════════════════════════════════════════════
+//  CHIPS (grade)
+// ══════════════════════════════════════════════════
 document.querySelectorAll('#grade-group .chip').forEach(function(ch){
-  ch.addEventListener('click',function(){
-    document.querySelectorAll('#grade-group .chip').forEach(function(c){c.classList.remove('on');});
+  ch.addEventListener('click', function(){
+    document.querySelectorAll('#grade-group .chip').forEach(function(c){ c.classList.remove('on'); });
     ch.classList.add('on');
   });
 });
 
-// ── Terms checkbox ──
-var termsOk=false;
-document.getElementById('terms-row').addEventListener('click',function(){
-  termsOk=!termsOk;
-  var b=document.getElementById('terms-box');
-  b.classList.toggle('on',termsOk);
+// ══════════════════════════════════════════════════
+//  TERMS CHECKBOX
+// ══════════════════════════════════════════════════
+var termsOk = false;
+document.getElementById('terms-row').addEventListener('click', function(){
+  termsOk = !termsOk;
+  var b = document.getElementById('terms-box');
+  b.classList.toggle('on', termsOk);
   b.classList.remove('err-box');
-  if(termsOk) document.getElementById('terms-err').style.display='none';
+  if(termsOk) document.getElementById('terms-err').style.display = 'none';
   updateProgress();
 });
 
-// ── Progress ──
-var trackIds=['f-student-id','f-name','f-email','f-phone','f-dob','f-dept','f-course-id','f-sem','f-year','f-reg-date'];
+// ══════════════════════════════════════════════════
+//  PROGRESS BAR
+// ══════════════════════════════════════════════════
+var trackIds = ['f-student-id','f-name','f-email','f-phone','f-dob','f-dept','f-course-id','f-sem','f-year','f-reg-date'];
+
 function updateProgress(){
-  var n=trackIds.filter(function(id){var e=document.getElementById(id);return e&&e.value.trim()!=='';}).length;
+  var n = trackIds.filter(function(id){
+    var e = document.getElementById(id);
+    return e && e.value.trim() !== '';
+  }).length;
   if(termsOk) n++;
-  document.getElementById('prog-fill').style.width=((n/(trackIds.length+1))*100)+'%';
+  document.getElementById('prog-fill').style.width = ((n / (trackIds.length + 1)) * 100) + '%';
 }
 trackIds.forEach(function(id){
-  var el=document.getElementById(id);
-  if(el){el.addEventListener('input',updateProgress);el.addEventListener('change',updateProgress);}
+  var el = document.getElementById(id);
+  if(el){ el.addEventListener('input', updateProgress); el.addEventListener('change', updateProgress); }
 });
 
-// ── Validate ──
-function vf(id,fn){
-  var el=document.getElementById(id),fg=el.closest('.fg'),ok=fn(el.value);
-  el.classList.toggle('err',!ok);fg.classList.toggle('has-err',!ok);
+// ══════════════════════════════════════════════════
+//  VALIDATION
+// ══════════════════════════════════════════════════
+function vf(id, fn){
+  var el = document.getElementById(id);
+  var fg = el.closest('.fg');
+  var ok = fn(el.value);
+  el.classList.toggle('err', !ok);
+  fg.classList.toggle('has-err', !ok);
   return ok;
 }
+
 function validate(){
-  var ok=true;
-  if(!vf('f-student-id',function(v){return v.trim().length>0;})) ok=false;
-  if(!vf('f-name',      function(v){return v.trim().length>0;})) ok=false;
-  if(!vf('f-email',     function(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);})) ok=false;
-  if(!vf('f-phone',     function(v){return v.trim().length>=7;})) ok=false;
-  if(!vf('f-dob',       function(v){return v.trim().length>0;})) ok=false;
-  if(!vf('f-dept',      function(v){return v!=='';})) ok=false;
-  if(!vf('f-course-id', function(v){return v!=='';})) ok=false;
-  if(!vf('f-sem',       function(v){return v!=='';})) ok=false;
-  if(!vf('f-year',      function(v){return v!=='';})) ok=false;
-  if(!vf('f-reg-date',  function(v){return v.trim().length>0;})) ok=false;
+  var ok = true;
+  if(!vf('f-student-id', function(v){ return v.trim().length > 0; }))           ok = false;
+  if(!vf('f-name',       function(v){ return v.trim().length > 0; }))           ok = false;
+  if(!vf('f-email',      function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); })) ok = false;
+  if(!vf('f-phone',      function(v){ return v.trim().length >= 7; }))          ok = false;
+  if(!vf('f-dob',        function(v){ return v.trim().length > 0; }))           ok = false;
+  if(!vf('f-dept',       function(v){ return v !== ''; }))                      ok = false;
+  if(!vf('f-course-id',  function(v){ return v !== ''; }))                      ok = false;
+  if(!vf('f-sem',        function(v){ return v !== ''; }))                      ok = false;
+  if(!vf('f-year',       function(v){ return v !== ''; }))                      ok = false;
+  if(!vf('f-reg-date',   function(v){ return v.trim().length > 0; }))          ok = false;
   if(!termsOk){
-    document.getElementById('terms-err').style.display='block';
+    document.getElementById('terms-err').style.display = 'block';
     document.getElementById('terms-box').classList.add('err-box');
-    ok=false;
+    ok = false;
   }
   return ok;
 }
+
+// Clear error state on input
 trackIds.forEach(function(id){
-  var el=document.getElementById(id);
-  if(el) el.addEventListener('input',function(){el.classList.remove('err');el.closest('.fg')&&el.closest('.fg').classList.remove('has-err');});
+  var el = document.getElementById(id);
+  if(el) el.addEventListener('input', function(){
+    el.classList.remove('err');
+    var fg = el.closest('.fg');
+    if(fg) fg.classList.remove('has-err');
+  });
 });
 
-// ── Fill success ──
+// ══════════════════════════════════════════════════
+//  FILL SUCCESS PAGE (summary cards)
+// ══════════════════════════════════════════════════
+var lastRegId = '';
+
 function fillSuccess(){
-  var rid='REG-'+Date.now().toString(36).toUpperCase().slice(-8);
-  document.getElementById('reg-id-display').textContent='Registration ID: '+rid;
-  document.getElementById('sd-sid').textContent=document.getElementById('f-student-id').value||'—';
-  document.getElementById('sd-name').textContent=document.getElementById('f-name').value||'—';
-  document.getElementById('sd-course').textContent=document.getElementById('f-course-id').value||'—';
-  var deptSel=document.getElementById('f-dept');
-  document.getElementById('sd-dept').textContent=deptSel.options[deptSel.selectedIndex]?deptSel.options[deptSel.selectedIndex].text:'—';
-  document.getElementById('sd-sem').textContent=document.getElementById('f-sem').value||'—';
-  document.getElementById('sd-year').textContent=document.getElementById('f-year').value||'—';
-  document.getElementById('sd-regdate').textContent=document.getElementById('f-reg-date').value||'—';
-  var gradeChip=document.querySelector('#grade-group .chip.on');
-  document.getElementById('sd-grade').textContent=gradeChip?gradeChip.dataset.val:'—';
+  lastRegId = 'REG-' + Date.now().toString(36).toUpperCase().slice(-8);
+  document.getElementById('reg-id-display').textContent = 'Registration ID: ' + lastRegId;
+  document.getElementById('sd-sid').textContent     = document.getElementById('f-student-id').value || '—';
+  document.getElementById('sd-name').textContent    = document.getElementById('f-name').value || '—';
+  document.getElementById('sd-course').textContent  = document.getElementById('f-course-id').value || '—';
+  var deptSel = document.getElementById('f-dept');
+  document.getElementById('sd-dept').textContent    = deptSel.options[deptSel.selectedIndex] ? deptSel.options[deptSel.selectedIndex].text : '—';
+  document.getElementById('sd-sem').textContent     = document.getElementById('f-sem').value || '—';
+  document.getElementById('sd-year').textContent    = document.getElementById('f-year').value || '—';
+  document.getElementById('sd-regdate').textContent = document.getElementById('f-reg-date').value || '—';
+  var gradeChip = document.querySelector('#grade-group .chip.on');
+  document.getElementById('sd-grade').textContent   = gradeChip ? gradeChip.dataset.val : '—';
 }
 
-// ── Confetti ──
+// ══════════════════════════════════════════════════
+//  CONSOLE DUMP — ALL 5 TABLES
+//  Called immediately after fillSuccess() on submit.
+// ══════════════════════════════════════════════════
+function dumpAllTables(){
+  // ── Collect raw form values ──
+  var studentId   = document.getElementById('f-student-id').value.trim();
+  var courseId    = document.getElementById('f-course-id').value;
+  var deptId      = document.getElementById('f-dept').value;
+  var gradeChip   = document.querySelector('#grade-group .chip.on');
+  var grade       = gradeChip ? gradeChip.dataset.val : null;
+  if(grade === '—') grade = null;   // NULL in DB if not yet assigned
+
+  // ── Resolve lookups ──
+  var course  = COURSES[courseId]    || {};
+  var dept    = DEPARTMENTS[deptId]  || {};
+  var faculty = FACULTY[course.Faculty_ID] || {};
+
+  // ── Build the 5 row objects ──
+
+  // TABLE 1: STUDENT
+  var studentRow = {
+    Student_ID:     studentId,
+    Name:           document.getElementById('f-name').value.trim(),
+    Email:          document.getElementById('f-email').value.trim(),
+    Phone:          document.getElementById('f-phone').value.trim(),
+    Date_of_Birth:  document.getElementById('f-dob').value,
+    Department_ID:  deptId
+  };
+
+  // TABLE 2: DEPARTMENT  (looked up from student's chosen dept)
+  var departmentRow = {
+    Department_ID:   dept.Department_ID   || deptId,
+    Department_Name: dept.Department_Name || '',
+    HOD_Name:        dept.HOD_Name        || '',
+    Building:        dept.Building        || ''
+  };
+
+  // TABLE 3: COURSE  (looked up from chosen course)
+  var courseRow = {
+    Course_ID:     course.Course_ID    || courseId,
+    Course_Name:   course.Course_Name  || '',
+    Credits:       course.Credits      || null,
+    Department_ID: course.Department_ID|| '',
+    Faculty_ID:    course.Faculty_ID   || '',
+    Max_Capacity:  course.Max_Capacity || null
+  };
+
+  // TABLE 4: FACULTY  (looked up via course → faculty_id)
+  var facultyRow = {
+    Faculty_ID:     faculty.Faculty_ID    || '',
+    Faculty_Name:   faculty.Faculty_Name  || '',
+    Email:          faculty.Email         || '',
+    Phone:          faculty.Phone         || '',
+    Department_ID:  faculty.Department_ID || '',
+    Specialization: faculty.Specialization|| ''
+  };
+
+  // TABLE 5: REGISTRATION
+  var registrationRow = {
+    Registration_ID:   lastRegId,
+    Student_ID:        studentId,
+    Course_ID:         courseId,
+    Semester:          document.getElementById('f-sem').value,
+    Year:              parseInt(document.getElementById('f-year').value, 10),
+    Grade:             grade,
+    Registration_Date: document.getElementById('f-reg-date').value
+  };
+
+  // ── Print to console ──
+  console.log('%c╔══════════════════════════════════════════════╗', 'color:#2ab5b5;font-weight:bold');
+  console.log('%c  EDUVERSE — REGISTRATION SUBMISSION PAYLOAD   ', 'color:#2ab5b5;font-weight:bold');
+  console.log('%c╚══════════════════════════════════════════════╝', 'color:#2ab5b5;font-weight:bold');
+
+  console.log('%c▶ TABLE: STUDENT', 'color:#c9a84c;font-weight:bold;font-size:13px');
+  console.table(studentRow);
+
+  console.log('%c▶ TABLE: DEPARTMENT', 'color:#c9a84c;font-weight:bold;font-size:13px');
+  console.table(departmentRow);
+
+  console.log('%c▶ TABLE: COURSE', 'color:#c9a84c;font-weight:bold;font-size:13px');
+  console.table(courseRow);
+
+  console.log('%c▶ TABLE: FACULTY', 'color:#c9a84c;font-weight:bold;font-size:13px');
+  console.table(facultyRow);
+
+  console.log('%c▶ TABLE: REGISTRATION', 'color:#c9a84c;font-weight:bold;font-size:13px');
+  console.table(registrationRow);
+
+  // Also log a single combined object for easy destructuring in backend glue code
+  console.log('%c▶ COMBINED PAYLOAD (all tables)', 'color:#4ac9b0;font-weight:bold;font-size:13px');
+  console.log({
+    STUDENT:      studentRow,
+    DEPARTMENT:   departmentRow,
+    COURSE:       courseRow,
+    FACULTY:      facultyRow,
+    REGISTRATION: registrationRow
+  });
+
+  console.log('%c══════════════════════════════════════════════════', 'color:#2ab5b5');
+}
+
+// ══════════════════════════════════════════════════
+//  CONFETTI
+// ══════════════════════════════════════════════════
 function confetti(){
-  var cols=['#c9a84c','#2ab5b5','#c4614a','#e8d49a','#4ac9b0','#a84caa','#ffffff'];
-  for(var i=0;i<100;i++){
+  var cols = ['#c9a84c','#2ab5b5','#c4614a','#e8d49a','#4ac9b0','#a84caa','#ffffff'];
+  for(var i = 0; i < 100; i++){
     (function(){
-      var el=document.createElement('div');
-      el.className='conf';
-      el.style.cssText='left:'+Math.random()*100+'vw;top:-12px;width:'+(4+Math.random()*8)+'px;height:'+(4+Math.random()*8)+'px;border-radius:'+(Math.random()>.4?'50%':'2px')+';background:'+cols[Math.floor(Math.random()*cols.length)]+';animation:confFall '+(1.4+Math.random()*2)+'s '+(Math.random()*1.2)+'s linear forwards;';
+      var el = document.createElement('div');
+      el.className = 'conf';
+      el.style.cssText = 'left:' + Math.random()*100 + 'vw;top:-12px;width:' + (4+Math.random()*8) + 'px;height:' + (4+Math.random()*8) + 'px;border-radius:' + (Math.random()>.4?'50%':'2px') + ';background:' + cols[Math.floor(Math.random()*cols.length)] + ';animation:confFall ' + (1.4+Math.random()*2) + 's ' + (Math.random()*1.2) + 's linear forwards;';
       document.body.appendChild(el);
-      setTimeout(function(){el.remove();},4000);
+      setTimeout(function(){ el.remove(); }, 4000);
     })();
   }
 }
 
-// ── Reset ──
+// ══════════════════════════════════════════════════
+//  RESET
+// ══════════════════════════════════════════════════
 function resetForm(){
   trackIds.forEach(function(id){
-    var el=document.getElementById(id);
-    if(el){el.value='';el.classList.remove('err');var fg=el.closest('.fg');if(fg)fg.classList.remove('has-err');}
+    var el = document.getElementById(id);
+    if(el){
+      el.value = '';
+      el.classList.remove('err');
+      var fg = el.closest('.fg');
+      if(fg) fg.classList.remove('has-err');
+    }
   });
-  termsOk=false;
-  var b=document.getElementById('terms-box');
+  termsOk = false;
+  var b = document.getElementById('terms-box');
   b.classList.remove('on','err-box');
-  document.getElementById('terms-err').style.display='none';
-  document.querySelectorAll('#grade-group .chip').forEach(function(c,i){c.classList.toggle('on',i===0);});
-  document.getElementById('prog-fill').style.width='0%';
-  var today=new Date().toISOString().split('T')[0];
-  var rd=document.getElementById('f-reg-date');
-  if(rd) rd.value=today;
+  document.getElementById('terms-err').style.display = 'none';
+  document.querySelectorAll('#grade-group .chip').forEach(function(c, i){ c.classList.toggle('on', i === 0); });
+  document.getElementById('prog-fill').style.width = '0%';
+  var today = new Date().toISOString().split('T')[0];
+  var rd = document.getElementById('f-reg-date');
+  if(rd) rd.value = today;
 }
 
-// ── Nav ──
-// Set today as default reg date
+// ══════════════════════════════════════════════════
+//  INIT — default reg date to today
+// ══════════════════════════════════════════════════
 (function(){
-  var today=new Date().toISOString().split('T')[0];
-  var rd=document.getElementById('f-reg-date');
-  if(rd) rd.value=today;
+  var today = new Date().toISOString().split('T')[0];
+  var rd = document.getElementById('f-reg-date');
+  if(rd) rd.value = today;
 })();
 
-document.getElementById('btn-go-form').addEventListener('click',function(){goTo('page-form','rgba(42,181,181,0.55)');});
-document.getElementById('btn-submit').addEventListener('click',function(){if(!validate())return;fillSuccess();goTo('page-success','rgba(42,181,181,0.65)');setTimeout(confetti,650);});
-document.getElementById('btn-cancel').addEventListener('click',function(){goTo('page-cancel','rgba(196,97,74,0.55)');});
-document.getElementById('btn-home').addEventListener('click',function(){resetForm();goTo('page-landing','rgba(201,168,76,0.5)');});
-document.getElementById('btn-back').addEventListener('click',function(){resetForm();goTo('page-landing','rgba(201,168,76,0.4)');});
+// ══════════════════════════════════════════════════
+//  NAV BINDINGS
+// ══════════════════════════════════════════════════
+document.getElementById('btn-go-form').addEventListener('click', function(){
+  goTo('page-form', 'rgba(42,181,181,0.55)');
+});
+
+document.getElementById('btn-submit').addEventListener('click', function(){
+  if(!validate()) return;
+  fillSuccess();
+  dumpAllTables();                              // ← console dump happens here
+  goTo('page-success', 'rgba(42,181,181,0.65)');
+  setTimeout(confetti, 650);
+});
+
+document.getElementById('btn-cancel').addEventListener('click', function(){
+  goTo('page-cancel', 'rgba(196,97,74,0.55)');
+});
+
+document.getElementById('btn-home').addEventListener('click', function(){
+  resetForm();
+  goTo('page-landing', 'rgba(201,168,76,0.5)');
+});
+
+document.getElementById('btn-back').addEventListener('click', function(){
+  resetForm();
+  goTo('page-landing', 'rgba(201,168,76,0.4)');
+});
 </script>
 </body>
 </html>
