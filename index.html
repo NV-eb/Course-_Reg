@@ -626,26 +626,19 @@ function fillSuccess(){
 }
 
 // ══════════════════════════════════════════════════
-//  CONSOLE DUMP — ALL 5 TABLES
 //  Called immediately after fillSuccess() on submit.
 // ══════════════════════════════════════════════════
 function dumpAllTables(){
-  // ── Collect raw form values ──
+  // --- This part remains the same ---
   var studentId   = document.getElementById('f-student-id').value.trim();
   var courseId    = document.getElementById('f-course-id').value;
   var deptId      = document.getElementById('f-dept').value;
   var gradeChip   = document.querySelector('#grade-group .chip.on');
   var grade       = gradeChip ? gradeChip.dataset.val : null;
-  if(grade === '—') grade = null;   // NULL in DB if not yet assigned
-
-  // ── Resolve lookups ──
+  if(grade === '—') grade = null;
   var course  = COURSES[courseId]    || {};
   var dept    = DEPARTMENTS[deptId]  || {};
   var faculty = FACULTY[course.Faculty_ID] || {};
-
-  // ── Build the 5 row objects ──
-
-  // TABLE 1: STUDENT
   var studentRow = {
     Student_ID:     studentId,
     Name:           document.getElementById('f-name').value.trim(),
@@ -654,16 +647,12 @@ function dumpAllTables(){
     Date_of_Birth:  document.getElementById('f-dob').value,
     Department_ID:  deptId
   };
-
-  // TABLE 2: DEPARTMENT  (looked up from student's chosen dept)
   var departmentRow = {
     Department_ID:   dept.Department_ID   || deptId,
     Department_Name: dept.Department_Name || '',
     HOD_Name:        dept.HOD_Name        || '',
     Building:        dept.Building        || ''
   };
-
-  // TABLE 3: COURSE  (looked up from chosen course)
   var courseRow = {
     Course_ID:     course.Course_ID    || courseId,
     Course_Name:   course.Course_Name  || '',
@@ -672,8 +661,6 @@ function dumpAllTables(){
     Faculty_ID:    course.Faculty_ID   || '',
     Max_Capacity:  course.Max_Capacity || null
   };
-
-  // TABLE 4: FACULTY  (looked up via course → faculty_id)
   var facultyRow = {
     Faculty_ID:     faculty.Faculty_ID    || '',
     Faculty_Name:   faculty.Faculty_Name  || '',
@@ -682,8 +669,6 @@ function dumpAllTables(){
     Department_ID:  faculty.Department_ID || '',
     Specialization: faculty.Specialization|| ''
   };
-
-  // TABLE 5: REGISTRATION
   var registrationRow = {
     Registration_ID:   lastRegId,
     Student_ID:        studentId,
@@ -694,37 +679,42 @@ function dumpAllTables(){
     Registration_Date: document.getElementById('f-reg-date').value
   };
 
-  // ── Print to console ──
-  console.log('%c╔══════════════════════════════════════════════╗', 'color:#2ab5b5;font-weight:bold');
-  console.log('%c  EDUVERSE — REGISTRATION SUBMISSION PAYLOAD   ', 'color:#2ab5b5;font-weight:bold');
-  console.log('%c╚══════════════════════════════════════════════╝', 'color:#2ab5b5;font-weight:bold');
-
-  console.log('%c▶ TABLE: STUDENT', 'color:#c9a84c;font-weight:bold;font-size:13px');
-  console.table(studentRow);
-
-  console.log('%c▶ TABLE: DEPARTMENT', 'color:#c9a84c;font-weight:bold;font-size:13px');
-  console.table(departmentRow);
-
-  console.log('%c▶ TABLE: COURSE', 'color:#c9a84c;font-weight:bold;font-size:13px');
-  console.table(courseRow);
-
-  console.log('%c▶ TABLE: FACULTY', 'color:#c9a84c;font-weight:bold;font-size:13px');
-  console.table(facultyRow);
-
-  console.log('%c▶ TABLE: REGISTRATION', 'color:#c9a84c;font-weight:bold;font-size:13px');
-  console.table(registrationRow);
-
-  // Also log a single combined object for easy destructuring in backend glue code
-  console.log('%c▶ COMBINED PAYLOAD (all tables)', 'color:#4ac9b0;font-weight:bold;font-size:13px');
-  console.log({
+  // --- This is the new part for sending data to the backend ---
+  const payload = {
     STUDENT:      studentRow,
     DEPARTMENT:   departmentRow,
     COURSE:       courseRow,
     FACULTY:      facultyRow,
     REGISTRATION: registrationRow
-  });
+  };
 
-  console.log('%c══════════════════════════════════════════════════', 'color:#2ab5b5');
+  // We still log to the console for debugging, but now we also send to the server.
+  console.log('%c╔══════════════════════════════════════════════╗', 'color:#2ab5b5;font-weight:bold');
+  console.log('%c  EDUVERSE — SENDING PAYLOAD TO SERVER...       ', 'color:#2ab5b5;font-weight:bold');
+  console.log('%c╚══════════════════════════════════════════════╝', 'color:#2ab5b5;font-weight:bold');
+  console.log({ payload });
+
+  fetch('/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      console.log('Server response: Success!', data);
+    } else {
+      console.error('Server response: Error!', data);
+      // Optional: Show an error message to the user
+      alert('There was an error processing your registration. Please try again.');
+    }
+  })
+  .catch((error) => {
+    console.error('Fetch Error:', error);
+    alert('Could not connect to the server. Please check if the server is running and try again.');
+  });
 }
 
 // ══════════════════════════════════════════════════
