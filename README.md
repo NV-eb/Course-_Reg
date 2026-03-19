@@ -68,9 +68,10 @@ Use **DB Browser for SQLite**:
 
 Steps:
 
-1. Open `eduverse.db`
-2. Go to **Browse Data**
-3. Select tables like:
+1. Open DB Browser
+2. Click on **Open Database** and open `eduverse.db` generated on form submission
+3. Click on **Browse Data**
+4. Select tables like:
 
    * `STUDENT`
    * `COURSE`
